@@ -10,7 +10,7 @@ With that you should have 16 freely programmable buttons.
 Due the nature of the HOLD detection, the short press only fires at *key-up* (the long press fires after 1 second still pressing it).
 
 I used the ADS1115 with an 4.7K pullup resistor from A0 to 3.3V. This is the best resistor value for these particular SWCs. 
-This was thoughtfully calculated using an Excel spreadsheet with these exact SWC resistor values.
+This was thoughtfully calculated using an Excel spreadsheet with these exact SWC resistor values (attached).
 Other resistor values might increase the chances of false detection.
 The "distance" between ADC values when measuring the SWC are the furthest apart with a 4.7K resistor.
 
