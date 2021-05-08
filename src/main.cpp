@@ -12,7 +12,7 @@ void setup()
 
 byte pressed_key = 0;                             // Stores the button pressed, 1-8
 uint16_t key_occur[9] = {0, 0, 0, 0, 0, 0, 0, 0}; // Stores occurences key 1-8
-byte valid_loop = 0;                              // When button is pressed, increases until the button is valid
+byte valid_loop = 0;                              // When a button is pressed, increases, used for debounce
 
 // Used for debouncing. Counts the occurrences of all 8 keys as long as they are pressed down
 // The key which appears the MOST in the array will get selected
@@ -35,6 +35,7 @@ byte getBiggestKey()
   return max_i;
 }
 
+// The entire logic is inside this function to declutter the main loop
 byte ReadSWC()
 {
   int16_t val = ADS.readADC(0); // Read channel A0
@@ -82,16 +83,15 @@ byte ReadSWC()
 
   else
   {
-    if (val > 26000)
+    if (val > 26000) // Value when not pressed
     {
 
       // Loops required to make the pressed button valid - Debouncing
       // > and < are there to only fire it once without requiring a new (bool) variable
-      byte temp_return = 0;
+      byte temp_return = 0; // We can't return here or the rest won't execute, so let's store it temporarily and at the end return it
       if (valid_loop > 6 && valid_loop < 60)
       {
-        //Serial.println(getBiggestKey());
-        temp_return = getBiggestKey();
+        temp_return = getBiggestKey(); // Get the most occured entry
       }
 
       pressed_key = 0;
@@ -106,24 +106,25 @@ byte ReadSWC()
 
   if (pressed_key > 0)
   {
-    key_occur[pressed_key]++;
+    key_occur[pressed_key]++; // Put it into the corresponding index
     valid_loop++;
-
+    // Technically could be replaced to millis, but meh, close enough
+    // The loop cycles should be pretty similar in duration
+    // Also, lets let it run only for one cycle, that's why >= and <
     if (valid_loop >= 60 && valid_loop < 61)
     {
       // Holding
-      //Serial.println(getBiggestKey() + 8);
       return getBiggestKey() + 8;
     }
   }
-  return 0;
+  return 0; // It just works, don't ask me why, it's 1AM...
 }
 
 void loop()
 {
-  byte key = ReadSWC();
-  if (key)
+  byte key = ReadSWC(); // Read the current pressed key
+  if (key)              // If the key is bigger than 0
   {
-    Serial.println(key);
+    Serial.println(key); // Do whatever (1-8 short, 9-16 long press)
   }
 }
