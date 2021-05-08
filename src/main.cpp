@@ -21,7 +21,7 @@ byte getBiggestKey()
 {
 
   uint16_t max_v = 0;
-  uint16_t max_i = 0;
+  byte max_i = 0;
 
   for (int i = 0; i < 9; i++)
   {
