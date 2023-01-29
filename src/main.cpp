@@ -107,7 +107,12 @@ byte ReadSWC()
   if (pressed_key > 0)
   {
     key_occur[pressed_key]++; // Put it into the corresponding index
-    valid_loop++;
+    
+    if(valid_loop < 255) {
+      valid_loop++;
+    } else {
+      valid_loop = 255;
+    }
     // Technically could be replaced to millis, but meh, close enough
     // The loop cycles should be pretty similar in duration
     // Also, lets let it run only for one cycle, that's why >= and <
